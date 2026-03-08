@@ -1,4 +1,4 @@
-from nn.base import Module, Parameter
+from .base import Module, Parameter
 
 import numpy as np
 
@@ -20,3 +20,30 @@ class Embedding(Module):
                 xi = self.x[i, j]
                 demb[xi] += dout[i, j]
         return demb
+    
+
+class Flatten:
+    def __init__(self, start_dim=1, end_dim=-1):
+        self.start_dim = start_dim
+        self.end_dim = end_dim
+        self.orig_shape = None
+    
+    def forward(self, x):
+        self.orig_shape = x.shape
+        flatten_size = 1
+
+        if self.end_dim != -1:
+            end = self.end_dim + 1
+        else:
+            end = len(x.shape)
+
+        for dim in x.shape[self.start_dim:end]:
+            flatten_size *= dim
+        
+        shape = (*x.shape[:self.start_dim], flatten_size)
+        x = x.reshape(shape)
+        return x
+    
+    def backward(self, dout):
+        return dout.reshape(self.orig_shape)
+        
