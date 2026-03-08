@@ -1,5 +1,7 @@
-BLOCK_SIZE = 8
+from .dataset import Dataset
 
+BLOCK_SIZE = 8
+    
 def load_dataset(path="data/sentences.txt"):
     data = []
     to_check = "â€™"
@@ -33,7 +35,7 @@ def create_samples(data, stoi):
         for char in line + "*":
             target = stoi[char]
             X.append(context)
-            y.append([char])
+            y.append([target])
 
-            context = context[1:] + [char]
+            context = context[1:] + [target]
     return X, y
