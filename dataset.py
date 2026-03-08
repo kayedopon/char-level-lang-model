@@ -1,3 +1,5 @@
+BLOCK_SIZE = 8
+
 def load_dataset(path="data/sentences.txt"):
     data = []
     to_check = "â€™"
@@ -13,9 +15,25 @@ def get_char_vocab(data):
     for line in data:
         for char in line:
             chars.add(char)
+    chars.add("^") # start token
+    chars.add("*") # end token
+
     return chars
 
 def encode_chars(chars):
     stoi = {c:i for i, c in enumerate(chars)}
     itos = {i:c for c, i in stoi.items()}
     return stoi, itos
+
+def create_samples(data, stoi):
+    X, y = [], []
+    start_token = stoi["^"]
+    for line in data:
+        context = [start_token] * BLOCK_SIZE
+        for char in line + "*":
+            target = stoi[char]
+            X.append(context)
+            y.append([char])
+
+            context = context[1:] + [char]
+    return X, y
