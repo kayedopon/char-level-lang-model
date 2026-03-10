@@ -20,6 +20,9 @@ class DataLoader:
             
             yield np.array(X_batch), np.array(y_batch)
 
+    def __len__(self):
+         return len(self.dataset)
+
             
 
 ### Came up with better implementaion

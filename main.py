@@ -1,10 +1,8 @@
 from utils.data import load_dataset, get_char_vocab, encode_chars, create_samples
 from utils.dataset import Dataset
 from utils.dataloader import DataLoader
-from nn.embedding import Embedding, Flatten
-from nn.sequential import Sequential
-from nn.activations import Tanh
-from nn.linear import Linear
+
+from nn.loss import MulticlassCrossEntropy
 
 
 import numpy as np
@@ -19,7 +17,13 @@ def main():
     data = Dataset(X, y)
 
     loader = DataLoader(data)
-    
+    p = np.array([[0.3432, 0.4654, 0.2123], [1.2342, 0.5342, 0.8324]])
+    y = np.array([1, 0])
+
+    loss_fn = MulticlassCrossEntropy()
+    loss = loss_fn.forward(p, y)
+    print(loss)
+
 
 if __name__ == "__main__":
     main()
