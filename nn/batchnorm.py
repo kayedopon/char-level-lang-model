@@ -1,12 +1,13 @@
-from .base import Module
+from .base import Module, Parameter
 
 import numpy as np
 
 
 class BatchNorm(Module):
     def __init__(self, num_features, eps=1e-5, momentum=0.1):
-        self.gamma = np.ones((1, num_features))
-        self.beta =  np.zeros((1, num_features))
+        super().__init__()
+        self.gamma = Parameter(np.ones((1, num_features)))
+        self.beta =  Parameter(np.zeros((1, num_features)))
 
         self.eps = eps
         self.momentum = momentum
