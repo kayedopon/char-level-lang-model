@@ -21,7 +21,7 @@ class DataLoader:
             yield np.array(X_batch), np.array(y_batch)
 
     def __len__(self):
-         return len(self.dataset)
+         return int(np.ceil(len(self.dataset) / self.batch_size))
 
             
 

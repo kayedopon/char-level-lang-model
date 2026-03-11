@@ -9,7 +9,7 @@ from nn.optim import Adam
 
 from mlp_lm import MLP_LM
 
-from train import train_step
+from train import train
 
 
 import numpy as np
@@ -29,13 +29,12 @@ def main():
 
     train_loader = DataLoader(train_data, shuffle=True)
     test_loader = DataLoader(test_data)
-    
-    model = MLP_LM(8, 160, VOCAB_SIZE, 10)
+    model = MLP_LM(8, 160, VOCAB_SIZE, 20)
     
     loss_fn = MulticlassCrossEntropy()
     optim = Adam(model.parameters())
 
-    train_step(model,train_loader, loss_fn, optim)
+    train(model,train_loader, test_loader, loss_fn, optim, 15)
 
 
 if __name__ == "__main__":

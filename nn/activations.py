@@ -1,24 +1,6 @@
 import numpy as np
 
 
-class Sigmoid():
-    """
-    The implementation of Sigmoid activation function.
-
-    Computes: 
-        `1/(1+e^-x)`
-    """
-    def __init__(self):
-        self.out = None
-    
-    def forward(self, x):
-        self.out = 1 / (1 + np.exp(-x))
-        return self.out
-
-    def backward(self, dout):
-        return dout * (self.out * (1 - self.out))
-        
-
 class Tanh():
     """
     The implementation of Tanh activation function.
