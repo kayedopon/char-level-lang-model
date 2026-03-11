@@ -4,7 +4,7 @@ import numpy as np
 
 
 class DataLoader:
-    def __init__(self, dataset:Dataset, batch_size=64, shuffle=False):
+    def __init__(self, dataset, batch_size=64, shuffle=False):
         self.dataset = dataset
         self.batch_size = batch_size
         self.shuffle = shuffle
@@ -13,7 +13,7 @@ class DataLoader:
         indices = np.arange(len(self.dataset))
 
         if self.shuffle == True:
-                indices = np.random.shuffle(indices)
+                np.random.shuffle(indices)
 
         for start in range(0, len(indices), self.batch_size):
             X_batch, y_batch = self.dataset[start:start+self.batch_size]

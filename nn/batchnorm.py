@@ -24,7 +24,6 @@ class BatchNorm(Module):
 
     def forward(self, x, training=True):
         self.x = x
-        print(x.shape)
 
         if training:
             self.mean = np.mean(x, axis=0, keepdims=True)
@@ -32,13 +31,13 @@ class BatchNorm(Module):
 
             self.x_hat = (x - self.mean) / np.sqrt(self.var + self.eps)
 
-            out = self.gamma * self.x_hat + self.beta
+            out = self.gamma.value * self.x_hat + self.beta.value
 
             self.running_mean = (1 - self.momentum) * self.running_mean + self.momentum * self.mean
             self.running_var = (1 - self.momentum) * self.running_var + self.momentum * self.var
         else:
             self.x_hat = (x - self.running_mean) / np.sqrt(self.running_var + self.eps)
-            out = self.gamma * self.x_hat + self.beta
+            out = self.gamma.value * self.x_hat + self.beta.value
 
         return out
     
