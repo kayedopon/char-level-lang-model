@@ -19,3 +19,6 @@ class Sequential(Module):
         for l in reversed(self.layers):
             dout = l.backward(dout)
         return dout
+    
+    def chidren(self):
+        return self.layers

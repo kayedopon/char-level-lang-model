@@ -12,8 +12,8 @@ class BatchNorm(Module):
         self.eps = eps
         self.momentum = momentum
 
-        self.running_mean = np.ones((1, num_features))
-        self.running_var = np.zeros((1, num_features))
+        self.running_mean = np.zeros((1, num_features))
+        self.running_var = np.ones((1, num_features))
 
         self.x = None
         self.x_hat = None
@@ -25,7 +25,7 @@ class BatchNorm(Module):
     def forward(self, x, training=True):
         self.x = x
 
-        if training:
+        if self.training:
             self.mean = np.mean(x, axis=0, keepdims=True)
             self.var = np.var(x, axis=0, keepdims=True)
 

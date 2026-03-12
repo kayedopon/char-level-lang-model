@@ -14,6 +14,7 @@ class Module:
     def __init__(self):
         self._parameters = {}
         self._modules = {}
+        self.training = True
     
     def __setattr__(self, name, value):
         if isinstance(value, Parameter):
@@ -35,3 +36,16 @@ class Module:
 
         for name, module in self._modules.items():
             yield from module.named_parameters(prefix + name + ".")
+    
+    def train(self):
+        self.training = True
+        for m in self.children():
+            m.train()
+
+    def eval(self):
+        self.training = False
+        for m in self.children():
+            m.eval()
+
+    def children(self):
+        return []

@@ -15,6 +15,9 @@ class MLP_LM(Module):
             Linear(block_size*emb_dim, out_dim=hidden_units),
             BatchNorm(hidden_units),
             Tanh(),
+            Linear(hidden_units, hidden_units),
+            BatchNorm(hidden_units),
+            Tanh(),
             Linear(hidden_units, vocab_size)
         )
 

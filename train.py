@@ -4,6 +4,7 @@ import numpy as np
 def train_step(model, train_dataloader, loss_fn, optim):
     train_acc, train_loss = 0, 0
 
+    model.train()
     for X, y in train_dataloader:
         y = y.reshape(-1)
 
@@ -26,6 +27,7 @@ def train_step(model, train_dataloader, loss_fn, optim):
 def test_step(model, test_dataloader, loss_fn):
     test_acc, test_loss = 0, 0
 
+    model.eval()
     for X, y in test_dataloader:
         y = y.reshape(-1)
 
@@ -50,15 +52,18 @@ def train(model, train_loader, test_loader, loss_fn, optim, epochs):
     }
 
     for epoch in range(epochs):
+        if epoch > 0 and epoch % 5 == 0:
+            optim.lr *= 0.5
+            
         train_acc, train_loss = train_step(model, train_loader, loss_fn, optim)
         test_acc, test_loss = test_step(model, test_loader, loss_fn)
         
-        print(f"Epoch: {epoch} | train_acc: {train_acc:.2f} | train_loss: {train_loss:.4f} | test_acc: {test_acc:.2f} | test_loss: {test_loss:.4f}")
+        print(f"Epoch: {epoch+1} | train_acc: {train_acc:.2f} | train_loss: {train_loss:.4f} | test_acc: {test_acc:.2f} | test_loss: {test_loss:.4f}")
 
-        res["train_acc"] = train_acc
-        res["train_loss"] = train_loss
-        res["test_acc"] = test_acc
-        res["test_loss"] = test_loss
+        res["train_acc"].append(train_acc)
+        res["train_loss"].append(train_loss)
+        res["test_acc"].append(test_acc)
+        res["test_loss"].append(test_loss)
     
     return res
 
