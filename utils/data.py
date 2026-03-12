@@ -1,18 +1,25 @@
 from .dataset import Dataset
 
 import numpy as np
+import pandas as pd
 
-
-BLOCK_SIZE = 8
+BLOCK_SIZE = 12
     
-def load_dataset(path="data/sentences.txt"):
+# def load_dataset(path="data/sentences.txt"):
+#     data = []
+#     to_check = "â€™"
+#     with open(path, "r") as f:
+#         i = 0
+#         for line in f:
+#             if not to_check in line:
+#                 data.append(line.strip('\n'))
+#     return data
+
+def load_dataset(path="data/eng_sentences.tsv"):
     data = []
-    to_check = "â€™"
-    with open(path, "r") as f:
-        i = 0
-        for line in f:
-            if not to_check in line:
-                data.append(line.strip('\n'))
+    sentences = pd.read_csv(path, sep="\t").iloc[:, 2]
+    for line in sentences:
+        data.append(line)
     return data
 
 def get_char_vocab(data):
