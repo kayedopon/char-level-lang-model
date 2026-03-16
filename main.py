@@ -18,17 +18,7 @@ from train import train
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-def main():
-    np.random.seed(42)
-    data = load_dataset()
-    length = int(len(data) * 0.03)
-    data = data[:length]
-
-    chars = get_char_vocab(data)
-    VOCAB_SIZE = len(chars)
-
-    stoi, itos = encode_chars(chars)
+def train_model(stoi, VOCAB_SIZE):
     X, y = create_samples(data, stoi)
 
     data = Dataset(X, y)
@@ -47,6 +37,18 @@ def main():
 
     save_model(model)
 
+def main():
+    np.random.seed(42)
+    data = load_dataset()
+    length = int(len(data) * 0.03)
+    data = data[:length]
+
+    chars = get_char_vocab(data)
+    VOCAB_SIZE = len(chars)
+
+    stoi, itos = encode_chars(chars)
+
+    model = MLP_LM(BLOCK_SIZE, 256, VOCAB_SIZE, 50)
     generate(model, stoi, itos, 20)
 
 

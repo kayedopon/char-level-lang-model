@@ -19,7 +19,7 @@ def generate(model: Module, stoi: dict, itos: dict, num_sen:int=20, path:str="ge
         path (str, optional): path to the file where generated sentences will be saved.
     """
     sentences = []
-
+    model.eval()
     for i in range(num_sen):
         out = ""
         context = np.array([stoi[START_TOKEN]] * BLOCK_SIZE)
@@ -34,11 +34,11 @@ def generate(model: Module, stoi: dict, itos: dict, num_sen:int=20, path:str="ge
             if ix == stoi[END_TOKEN]:
                 break
             out += itos[ix]
-    sentences.append(out)
+        sentences.append(out)
     
     with open(path, "w") as f:
         for s in sentences:
-            f.write(s)
+            f.write(s + "\n")
 
 def multinomial(probs):
     """
