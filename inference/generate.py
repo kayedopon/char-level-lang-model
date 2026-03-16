@@ -1,4 +1,4 @@
-from .data import START_TOKEN, END_TOKEN, BLOCK_SIZE
+from data.data import START_TOKEN, END_TOKEN, BLOCK_SIZE
 
 from nn.activations import softmax
 from nn.base import Module
@@ -23,13 +23,14 @@ def generate(model: Module, stoi: dict, itos: dict, num_sen:int=20, path:str="ge
     for i in range(num_sen):
         out = ""
         context = np.array([stoi[START_TOKEN]] * BLOCK_SIZE)
-        print(context)
+
         while True:
             logits = model.forward(np.expand_dims(context, axis=0))
-            probs = softmax(logits).squeeze(0)
+            probs = softmax(logits).squeeze(axis=0)
             ix = multinomial(probs)
 
             context = np.concatenate([context[1:], np.array([ix])])
+
             if ix == stoi[END_TOKEN]:
                 break
             out += itos[ix]
@@ -38,7 +39,6 @@ def generate(model: Module, stoi: dict, itos: dict, num_sen:int=20, path:str="ge
     with open(path, "w") as f:
         for s in sentences:
             f.write(s)
-
 
 def multinomial(probs):
     """

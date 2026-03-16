@@ -8,7 +8,7 @@ BLOCK_SIZE = 12
 START_TOKEN = "^"
 END_TOKEN = "`"
     
-# def load_dataset(path="data/sentences.txt"):
+# def load_dataset(path="data/datasets/eng_sentences.tsv"):
 #     data = []
 #     to_check = "â€™"
 #     with open(path, "r") as f:
@@ -18,7 +18,7 @@ END_TOKEN = "`"
 #                 data.append(line.strip('\n'))
 #     return data
 
-def load_dataset(path="data/eng_sentences.tsv"):
+def load_dataset(path="data/datasets/eng_sentences.tsv"):
     data = []
     sentences = pd.read_csv(path, sep="\t").iloc[:, 2]
     for line in sentences:
@@ -52,21 +52,3 @@ def create_samples(data, stoi):
 
             context = context[1:] + [target]
     return X, y
-
-def train_test_split(data, test_size=0.2, shuffle=False):
-    N = len(data)
-    
-    test_length = int(N * test_size)
-    train_length = N - test_length
-    
-    indices = np.arange(N)
-    if shuffle:
-        np.random.shuffle(indices)
-
-    train_idx = indices[:train_length]
-    test_idx = indices[train_length:]
-
-    train_data = data[train_idx]
-    test_data = data[test_idx]
-
-    return Dataset(*train_data), Dataset(*test_data)
