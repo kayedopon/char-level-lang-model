@@ -4,7 +4,16 @@ import numpy as np
 
 
 class BatchNorm(Module):
-    def __init__(self, num_features, eps=1e-5, momentum=0.1):
+    """
+    Batch Normalization normalizes activations across the batch dimension
+    to stabilize and accelerate training of deep neural networks.
+
+    Arguments:
+        num_features (int): Number of input features.
+        eps (float, optional):  Small constant added to variance for numerical stability.
+        momentum (float, optional): Momentum used for updating running mean and variance.
+    """
+    def __init__(self, num_features: int, eps:float=1e-5, momentum:float=0.1):
         super().__init__()
         self.gamma = Parameter(np.ones((1, num_features)))
         self.beta =  Parameter(np.zeros((1, num_features)))
@@ -20,9 +29,7 @@ class BatchNorm(Module):
         self.mean = None
         self.var = None
 
-
-
-    def forward(self, x, training=True):
+    def forward(self, x):
         self.x = x
 
         if self.training:
@@ -31,17 +38,17 @@ class BatchNorm(Module):
 
             self.x_hat = (x - self.mean) / np.sqrt(self.var + self.eps)
 
-            out = self.gamma.value * self.x_hat + self.beta.value
-
             self.running_mean = (1 - self.momentum) * self.running_mean + self.momentum * self.mean
             self.running_var = (1 - self.momentum) * self.running_var + self.momentum * self.var
         else:
             self.x_hat = (x - self.running_mean) / np.sqrt(self.running_var + self.eps)
-            out = self.gamma.value * self.x_hat + self.beta.value
 
-        return out
+        return self.gamma.value * self.x_hat + self.beta.value
     
     def backward(self, dout):
+        if not self.training:
+            raise RuntimeError("BatchNorm backward should not be called in eval mode!")
+        
         N = dout.shape[0]
 
         self.gamma.grad += (self.x_hat * dout).sum(axis=0, keepdims=True)

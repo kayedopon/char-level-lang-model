@@ -7,6 +7,10 @@ class MulticlassCrossEntropy(Module):
     """
     Implements Multiclass cross entropy.
     Requires logits as input for prediction since it's internally using softmax.
+
+    Arguments:
+        p: logits
+        y: targets
     """
     def __init__(self):
         self.p = None

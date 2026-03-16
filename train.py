@@ -1,7 +1,20 @@
 import numpy as np
 
+from data.dataloader import DataLoader
+from nn.base import Module
+from nn.loss import MulticlassCrossEntropy
+from nn.optim import Adam
 
-def train_step(model, train_dataloader, loss_fn, optim):
+def train_step(model: Module, train_dataloader: DataLoader, loss_fn: MulticlassCrossEntropy, optim: Adam):
+    """
+    Function the implements train step of model training cycle.
+
+    Arguments:
+        model (nn.base.Module): model to be trained.
+        train_dataloader (data.dataloader.DataLoader): loader that contains train data.
+        loss_fn (nn.loss.MulticlassCrossEntropy): loss function to be minimized.
+        optim (nn.optim.Adam): optimizer.
+    """
     train_acc, train_loss = 0, 0
 
     model.train()
@@ -24,7 +37,15 @@ def train_step(model, train_dataloader, loss_fn, optim):
 
     return train_acc, train_loss
 
-def test_step(model, test_dataloader, loss_fn):
+def test_step(model: Module, test_dataloader: DataLoader, loss_fn: MulticlassCrossEntropy,):
+    """
+    Function the implements eval step of model training cycle.
+
+    Arguments:
+        model (nn.base.Module): model to be trained.
+        test_dataloader (data.dataloader.DataLoader): loader that contains test data.
+        loss_fn (nn.loss.MulticlassCrossEntropy): loss function to be minimized.
+    """
     test_acc, test_loss = 0, 0
 
     model.eval()
@@ -43,7 +64,18 @@ def test_step(model, test_dataloader, loss_fn):
     
     return test_acc, test_loss
 
-def train(model, train_loader, test_loader, loss_fn, optim, epochs):
+def train(model: Module, train_loader: DataLoader, test_loader: DataLoader, loss_fn: MulticlassCrossEntropy, optim: Adam, epochs: int):
+    """
+    Function that starts the model training cycle and returns its result.
+
+    Arguments:
+        model (nn.base.Module): model to be trained.
+        train_dataloader (data.dataloader.DataLoader): loader that contains train data.
+        test_dataloader (data.dataloader.DataLoader): loader that contains test data.
+        loss_fn (nn.loss.MulticlassCrossEntropy): loss function to be minimized.
+        optim (nn.optim.Adam): optimizer.
+        epochs (int): number of epochs.
+    """
     res = {
         "train_acc": [],
         "train_loss": [],
