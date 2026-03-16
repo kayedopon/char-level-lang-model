@@ -4,9 +4,12 @@ import numpy as np
 
 
 class Embedding(Module):
+    """
+    Embedding layer mapping token indices to dense vectors.
+    """
     def __init__(self, num_embeddings, embedding_dim):
         super().__init__()
-        self.weights = Parameter(np.random.rand(num_embeddings, embedding_dim))
+        self.weights = Parameter(np.random.rand(num_embeddings, embedding_dim) * 0.01)
         self.x = None
 
     def forward(self, x):
@@ -15,10 +18,8 @@ class Embedding(Module):
     
     def backward(self, dout):
         demb = np.zeros_like(self.weights.value)
-        for i in range(self.x.shape[0]):
-            for j in range(self.x.shape[1]):
-                xi = self.x[i, j]
-                demb[xi] += dout[i, j]
+        np.add.at(demb, self.x, dout)
+        self.weights.grad = demb
         return demb
     
 
@@ -40,7 +41,7 @@ class Flatten:
         for dim in x.shape[self.start_dim:end]:
             flatten_size *= dim
         
-        shape = (*x.shape[:self.start_dim], flatten_size)
+        shape = (*x.shape[:self.start_dim], flatten_size, *x.shape[end:])
         x = x.reshape(shape)
         return x
     
