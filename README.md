@@ -1,17 +1,15 @@
 # Character-Level Language Model from Scratch
 
-This project implements a **character-level language model** using a **Multilayer Perceptron (MLP)** built entirely **from scratch with NumPy**, without using deep learning frameworks such as PyTorch or TensorFlow.
-
-The model learns to predict the next character in a sequence and can generate new sentences after training.
+In project I tried to implement a character-level language model using a Multilayer Perceptron (MLP) built entirely from scratch with NumPy, without using deep learning frameworks such as PyTorch or TensorFlow. It showed me that such model is not suitable for generation of long sequences and performed bad in inference and it is better to use Transformers or RNNs for such project.
 
 The implementation includes a small neural network framework, a training pipeline, dataset utilities, and inference.
 
----
+The model was supposed to predict the next character in a sequence and generate new sentences after training.
 
 # Features
 
-- Neural network implemented **from scratch**
-- Custom **backpropagation**
+- Neural network implemented from scratch
+- Custom backpropagation
 - Custom implementations of:
   - Linear layer
   - Embedding layer
@@ -20,12 +18,10 @@ The implementation includes a small neural network framework, a training pipelin
   - Softmax
   - Multiclass Cross Entropy loss
   - Adam optimizer
-- Custom **Dataset** and **DataLoader**
+- Custom Dataset and DataLoader
 - Training and evaluation loops
 - Sentence generation using probabilistic sampling
 - Visualization of training metrics
-
----
 
 # Model Architecture
 
@@ -55,7 +51,6 @@ Softmax
 
 The embedding layer converts characters into dense vectors before passing them through the MLP.
 
----
 
 # Project Structure
 
@@ -92,8 +87,6 @@ project/
 └── models/              # saved parameters
 ```
 
----
-
 # Procedure
 
 The main procedures defined in `main.py`:
@@ -115,8 +108,6 @@ Training uses the following components:
 
 - Loss: Multiclass Cross Entropy  
 - Optimizer: Adam
-
----
 
 Inference Procedure:
 
@@ -147,14 +138,9 @@ The script will:
 
 1. Load model
 2. Generate example sentences
-
----
-
 # Example Generation
 
 The model generates sentences by sampling from the predicted probability distribution of the next character using a multinomial sampler.
-
----
 
 # Learning Goals
 
