@@ -6,7 +6,8 @@ from nn.base import Module
 import numpy as np
 
 
-def generate(model: Module, stoi: dict, itos: dict, num_sen:int=20, path:str="gen_sentences.txt"):
+def generate(model: Module, stoi: dict, itos: dict, num_sen:int=20, path:str="gen_sentences.txt",
+             max_len=100, temperature=1.0, greedy=False):
     """
     A function that uses the trained model and generate `num_sen` number of sentences
     and save them inside of specified file.
@@ -20,14 +21,18 @@ def generate(model: Module, stoi: dict, itos: dict, num_sen:int=20, path:str="ge
     """
     sentences = []
     model.eval()
-    for i in range(num_sen):
+    for _ in range(num_sen):
         out = ""
         context = np.array([stoi[START_TOKEN]] * BLOCK_SIZE)
 
-        while True:
+        for _ in range(max_len):
             logits = model.forward(np.expand_dims(context, axis=0))
+            logits /= temperature
             probs = softmax(logits).squeeze(axis=0)
-            ix = multinomial(probs)
+            if greedy:
+                ix = np.argmax(probs)
+            else:
+                ix = multinomial(probs)
 
             context = np.concatenate([context[1:], np.array([ix])])
 

@@ -22,13 +22,13 @@ class Tanh():
         return dout * ((4 * np.exp(2 * self.x)) / (np.exp(2 * self.x) + 1) ** 2)
     
 
-def softmax(logits):
+def softmax(logits, axis=1):
     """
     The implementation of softmax activation function.
 
     Computes:
         e^x / sum(e^x)
     """
-    logits = logits - np.max(logits, axis=1, keepdims=True)
+    logits = logits - np.max(logits, axis=axis, keepdims=True)
     exp = np.exp(logits)
-    return exp / np.sum(exp, axis=1, keepdims=True)
+    return exp / np.sum(exp, axis=axis, keepdims=True)

@@ -18,29 +18,31 @@ from train import train
 import numpy as np
 import matplotlib.pyplot as plt
 
-def train_model(stoi, VOCAB_SIZE):
+def train_model(data, stoi, VOCAB_SIZE, hidden, emb):
     X, y = create_samples(data, stoi)
 
     data = Dataset(X, y)
-    train_data, test_data = train_test_split(data, test_size=0.1, shuffle=True)
+    train_data, test_data = train_test_split(data, test_size=0.15, shuffle=True)
 
     train_loader = DataLoader(train_data, shuffle=True)
     test_loader = DataLoader(test_data)
 
-    model = MLP_LM(BLOCK_SIZE, 256, VOCAB_SIZE, 50)
+    model = MLP_LM(BLOCK_SIZE, hidden, VOCAB_SIZE, emb)
     loss_fn = MulticlassCrossEntropy()
     optim = Adam(model.parameters())
 
-    res = train(model,train_loader, test_loader, loss_fn, optim, 5)
+    epochs = 10
+
+    res = train(model,train_loader, test_loader, loss_fn, optim, epochs)
 
     plot_results(res)
 
-    save_model(model)
+    save_model(model, path="models/p.npz")
 
 def main():
     np.random.seed(42)
     data = load_dataset()
-    length = int(len(data) * 0.03)
+    length = int(len(data) * 1)
     data = data[:length]
 
     chars = get_char_vocab(data)
@@ -48,9 +50,12 @@ def main():
 
     stoi, itos = encode_chars(chars)
 
-    model = MLP_LM(BLOCK_SIZE, 256, VOCAB_SIZE, 50)
-    generate(model, stoi, itos, 20)
-
+    hidden = 600
+    emb = 100
+    train_model(data, stoi, VOCAB_SIZE, hidden, emb)
+    model = MLP_LM(BLOCK_SIZE, 600, VOCAB_SIZE, 60)
+    load_model(model, path="models/p.npz")
+    generate(model, stoi, itos, 20, greedy=False)
 
 if __name__ == "__main__":
     main()

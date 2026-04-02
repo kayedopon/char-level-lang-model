@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import random
 
-BLOCK_SIZE = 12
+BLOCK_SIZE = 24
 START_TOKEN = "^"
 END_TOKEN = "`"
     
@@ -18,9 +18,9 @@ END_TOKEN = "`"
 #                 data.append(line.strip('\n'))
 #     return data
 
-def load_dataset(path="data/datasets/eng_sentences.tsv"):
+def load_dataset(path="data\datasets\Translation_2.csv"):
     data = []
-    sentences = pd.read_csv(path, sep="\t").iloc[:, 2]
+    sentences = pd.read_csv(path).iloc[:, 0]
     for line in sentences:
         data.append(line)
     return data

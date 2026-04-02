@@ -84,8 +84,8 @@ def train(model: Module, train_loader: DataLoader, test_loader: DataLoader, loss
     }
 
     for epoch in range(epochs):
-        if epoch > 0 and epoch % 5 == 0:
-            optim.lr *= 0.5
+        if epoch + 1 > 0 and (epoch + 1) % 2 == 0:
+            optim.lr *= 0.7
             
         train_acc, train_loss = train_step(model, train_loader, loss_fn, optim)
         test_acc, test_loss = test_step(model, test_loader, loss_fn)

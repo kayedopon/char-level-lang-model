@@ -9,15 +9,23 @@ from nn.base import Module
 class MLP_LM(Module):
     def __init__(self, block_size, hidden_units, vocab_size, emb_dim):
         super().__init__()
+        mid_units = int(hidden_units * 1.5)
+
         self.net = Sequential(
             Embedding(vocab_size, emb_dim),
             Flatten(),
             Linear(block_size*emb_dim, out_dim=hidden_units),
             BatchNorm(hidden_units),
             Tanh(),
-            Linear(hidden_units, hidden_units),
+
+            Linear(hidden_units, mid_units),
+            BatchNorm(mid_units),
+            Tanh(),
+
+            Linear(mid_units, hidden_units),
             BatchNorm(hidden_units),
             Tanh(),
+            
             Linear(hidden_units, vocab_size)
         )
 
